@@ -238,7 +238,6 @@ const Player = forwardRef(
             setBitrateList(nativeEvent.bitrates);
           }}
         >
-          <StatusBar hidden={isFull} />
           <ControlerView
             {...restProps}
             title={title}
