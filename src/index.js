@@ -1,5 +1,5 @@
 import React, { forwardRef, useRef, useState, useEffect, useImperativeHandle } from 'react';
-import { StyleSheet, StatusBar, Image, View } from 'react-native';
+import { StyleSheet, Image, View, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import { useBackHandler, useAppState, useDimensions } from '@react-native-community/hooks';
 
@@ -153,15 +153,23 @@ const Player = forwardRef(
 
     const isOrientationLandscape = isLandscape;
 
+    const width = Platform.select({
+      ios: 100,
+      android: 60
+    })
+
     const fullscreenStyle = {
       position: 'absolute',
       top: 0,
-      left: 0,
+      right:0,
+      bottom:0,
+      left:20,
+
       width: isOrientationLandscape
-        ? Math.max(screen.width, screen.height)
-        : Math.min(screen.width, screen.height),
+        ? Math.max(screen.width, screen.height)  - width
+        : Math.min(screen.width, screen.height) ,
       height: isOrientationLandscape
-        ? Math.min(screen.width, screen.height)
+        ? Math.min(screen.width, screen.height) 
         : Math.max(screen.width, screen.height),
       zIndex: 100,
     };
@@ -169,24 +177,26 @@ const Player = forwardRef(
     const fullwindowStyle = {
       position: 'absolute',
       top: 0,
-      left: 0,
+      right: 0,
+      left:0,
+      bottom:0,
       width: isOrientationLandscape
-        ? Math.max(window.width, window.height)
+        ? Math.max(window.width, window.height) 
         : Math.min(window.width, window.height),
       height: isOrientationLandscape
-        ? Math.min(window.width, window.height)
+        ? Math.min(window.width, window.height)  
         : Math.max(window.width, window.height),
     };
 
     return (
-      <View style={[styles.base, isFull ? fullscreenStyle : style]}>
+      <View style={[styles.base, isFull ? fullwindowStyle : style]}>
         <ALIViewPlayer
           {...restProps}
           ref={playerRef}
           source={playSource}
           setAutoPlay={setAutoPlay}
           selectBitrateIndex={bitrateIndex}
-          style={isFull ? fullwindowStyle : StyleSheet.absoluteFill}
+          style={isFull ? fullscreenStyle : StyleSheet.absoluteFill}
           onAliPrepared={({ nativeEvent }) => {
             setTotal(nativeEvent.duration);
             if (isPlaying) {
