@@ -2,7 +2,7 @@ import React, { forwardRef, useRef, useState, useEffect, useImperativeHandle } f
 import { StyleSheet, StatusBar, Image, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { useBackHandler, useAppState, useDimensions } from '@react-native-community/hooks';
-import { hideNavigationBar, showNavigationBar } from 'react-native-navigation-bar-color';
+
 
 import ALIViewPlayer from './ALIViewPlayer';
 import ControlerView from './components/ControlerView';
@@ -136,13 +136,11 @@ const Player = forwardRef(
     const handleFullScreenIn = () => {
       setIsFull(true);
       onFullScreen(true);
-      hideNavigationBar();
     };
 
     const handleFullScreenOut = () => {
       onFullScreen(false);
       setIsFull(false);
-      showNavigationBar();
     };
 
     const handleChangeConfig = (config) => {
