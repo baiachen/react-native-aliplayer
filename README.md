@@ -11,6 +11,8 @@
 `$ react-native link react-native-aliplayer`
 
 ### Manual installation
+#### Android
+add `maven { url 'https://maven.aliyun.com/repository/releases' }` in allprojects.repositories
 
 ## Usage
 
