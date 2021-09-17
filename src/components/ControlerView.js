@@ -162,7 +162,7 @@ function ControlerView({
 
   return (
     <SafeAreaView style={styles.controler}>
-      {!isStart && <Image source={poster} resizeMode="cover" style={StyleSheet.absoluteFill} />}
+      {!isStart && <Image source={poster} resizeMode="contain" style={StyleSheet.absoluteFill} />}
       <AnimateView
         style={[
           styles.header,
