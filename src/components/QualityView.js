@@ -35,7 +35,7 @@ function QualityView({ visible, bitrateList, bitrateIndex, themeColor, onClose, 
     return null;
   }
 
-  const chooseData = bitrateList.map((o) => {
+  const chooseData = bitrateList.filter(o=>o.height>0).map((o) => {
     return { value: o.index, label: getBitrateLabel(o) };
   });
 

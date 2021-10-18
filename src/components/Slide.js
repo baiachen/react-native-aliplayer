@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useMemo } from 'react';
-import Slider, { Ballon } from 'react-native-reanimated-slider';
+import Slider, { Ballon } from 'react-native-reanimated-slider-b';
 import Animated from 'react-native-reanimated';
 import { formatTime } from '../lib/utils';
 
