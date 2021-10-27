@@ -221,7 +221,7 @@ const Player = forwardRef(
             setError(false);
             setLoading(false);
             setIsStopPlay(false);
-            setIsPlaying(true);
+            // setIsPlaying(true);
             setIsStart(true);
           }}
           onAliCurrentPositionUpdate={({ nativeEvent }) => {
