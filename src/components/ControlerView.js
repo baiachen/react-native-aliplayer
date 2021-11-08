@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
 import { Text, Animated, Easing, SafeAreaView, StyleSheet, Image } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Slider from './Slide';
@@ -80,6 +80,7 @@ function ControlerView({
   themeColor,
   poster,
   isStart,
+  disableSlide,
   // config
   setSpeed,
   setScaleMode,
@@ -160,6 +161,7 @@ function ControlerView({
     }
   };
 
+
   return (
     <SafeAreaView style={styles.controler}>
       {!isStart && <Image source={poster} resizeMode="contain" style={StyleSheet.absoluteFill} />}
@@ -226,7 +228,7 @@ function ControlerView({
           cache={buffer}
           style={styles.bottomSlide}
           onSlidingComplete={(value) => {
-            onSlide(parseInt(value));
+            onSlide(parseInt(value), !disableSlide);
           }}
           themeColor={themeColor}
         />
@@ -240,6 +242,7 @@ function ControlerView({
       </AnimateView>
       <Progress disable={visible} value={current} maxValue={total} themeColor={themeColor} />
       <ConfigView
+        disableSlide={disableSlide}
         config={configObj}
         visible={configVisible}
         themeColor={themeColor}

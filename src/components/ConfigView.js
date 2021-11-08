@@ -61,7 +61,7 @@ const playScaleMode = [
   { label: '拉伸', value: 2 },
 ];
 
-function ConfigView({ visible, config, themeColor, onChange, onClose }) {
+function ConfigView({ visible, config, themeColor, onChange, onClose, disableSlide }) {
   const { setSpeed, setScaleMode, setLoop, setMute } = config;
   if (!visible) {
     return null;
@@ -97,6 +97,7 @@ function ConfigView({ visible, config, themeColor, onChange, onClose }) {
               data={playRate}
               defaultValue={setSpeed}
               themeColor={themeColor}
+              disableSlide={disableSlide}
               onChange={({ value }) => {
                 onChange({ setSpeed: value });
               }}

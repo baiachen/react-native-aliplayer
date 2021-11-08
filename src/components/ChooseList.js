@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
-function ChooseList({ data = [], themeColor, defaultValue, onChange }) {
+function ChooseList({ data = [], themeColor, defaultValue, onChange,disableSlide }) {
   const [value, setValue] = useState(defaultValue);
 
   const renderItem = (item) => {
@@ -19,6 +19,7 @@ function ChooseList({ data = [], themeColor, defaultValue, onChange }) {
       color: themeColor,
     };
     const handlePress = () => {
+      if (disableSlide) return
       if (value !== item.value) {
         setValue(item.value);
         onChange(item);

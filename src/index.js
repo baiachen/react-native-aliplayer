@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState, useEffect, useImperativeHandle } from 'react';
+import React, { forwardRef, useRef, useState, useEffect, useImperativeHandle, useCallback } from 'react';
 import { StyleSheet, Image, View, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import { useBackHandler, useAppState, useDimensions } from '@react-native-community/hooks';
@@ -26,9 +26,11 @@ const Player = forwardRef(
       onCompletion,
       setAutoPlay,
       onChangeBitrate,
+      onBitrateReady,
       onProgress,
       onPrepare,
       isLandscape,
+      disableSlide,
       ...restProps
     },
     ref
@@ -51,6 +53,10 @@ const Player = forwardRef(
     const [bitrateIndex, setBitrateIndex] = useState();
     const { screen, window } = useDimensions();
     const currentAppState = useAppState();
+
+    // const [isDisableSlide, setIsdisableSlide] = useState(disableSlide)
+
+
 
     useImperativeHandle(ref, () => ({
       play: (play) => {
@@ -122,9 +128,12 @@ const Player = forwardRef(
       playerRef.current.reloadPlay();
     };
 
-    const handleSlide = (value) => {
-      playerRef.current.seekTo(value);
-    };
+    const handleSlide = (value, enableSlide) => {
+      console.log(enableSlide)
+      if (enableSlide) {
+        playerRef.current.seekTo(value);
+      }
+    }
 
     const handleStop = () => {
       playerRef.current.stopPlay();
@@ -161,15 +170,15 @@ const Player = forwardRef(
     const fullscreenStyle = {
       position: 'absolute',
       top: 0,
-      right:0,
-      bottom:0,
-      left:20,
+      right: 0,
+      bottom: 0,
+      left: 20,
 
       width: isOrientationLandscape
-        ? Math.max(screen.width, screen.height)  - width
-        : Math.min(screen.width, screen.height) ,
+        ? Math.max(screen.width, screen.height) - width
+        : Math.min(screen.width, screen.height),
       height: isOrientationLandscape
-        ? Math.min(screen.width, screen.height) 
+        ? Math.min(screen.width, screen.height)
         : Math.max(screen.width, screen.height),
       zIndex: 100,
     };
@@ -178,13 +187,13 @@ const Player = forwardRef(
       position: 'absolute',
       top: 0,
       right: 0,
-      left:0,
-      bottom:0,
+      left: 0,
+      bottom: 0,
       width: isOrientationLandscape
-        ? Math.max(window.width, window.height) 
+        ? Math.max(window.width, window.height)
         : Math.min(window.width, window.height),
       height: isOrientationLandscape
-        ? Math.min(window.width, window.height)  
+        ? Math.min(window.width, window.height)
         : Math.max(window.width, window.height),
     };
 
@@ -204,7 +213,7 @@ const Player = forwardRef(
             }
             setCurrent(0);
             setBuffer(0);
-            onPrepare({ duration: nativeEvent.position });
+            onPrepare({ duration: nativeEvent.duration });
           }}
           onAliLoadingBegin={() => {
             setLoading(true);
@@ -229,6 +238,7 @@ const Player = forwardRef(
             onProgress({ progress: nativeEvent.position });
           }}
           onAliBufferedPositionUpdate={({ nativeEvent }) => {
+            // console.log('nativeEvent',nativeEvent)
             setBuffer(nativeEvent.position);
             onProgress({ buffered: nativeEvent.position });
           }}
@@ -245,6 +255,7 @@ const Player = forwardRef(
             onChangeBitrate(nativeEvent);
           }}
           onAliBitrateReady={({ nativeEvent }) => {
+            onBitrateReady(nativeEvent)
             setBitrateList(nativeEvent.bitrates);
           }}
         >
@@ -266,6 +277,7 @@ const Player = forwardRef(
             playSource={playSource}
             bitrateList={bitrateList}
             bitrateIndex={bitrateIndex}
+            disableSlide={disableSlide}
             onSlide={handleSlide}
             onPressPlay={handlePlay}
             onPressPause={handlePause}
@@ -291,23 +303,26 @@ Player.propTypes = {
   enableCast: PropTypes.bool, // 是否显示投屏按钮
   onCastClick: PropTypes.func, // 投屏按钮点击事件
   onChangeBitrate: PropTypes.func, // 切换清晰度
+  onBitrateReady: PropTypes.func, // 切换清晰度
   onProgress: PropTypes.func, // 进度回调
   onPrepare: PropTypes.func, // 播放准备回调
   isLandscape: PropTypes.bool, // 全屏是否横屏
 };
 
 Player.defaultProps = {
-  onFullScreen: () => {},
-  onCompletion: () => {},
-  onCastClick: () => {},
-  onChangeBitrate: () => {},
-  onProgress: () => {},
-  onPrepare: () => {},
+  onFullScreen: () => { },
+  onCompletion: () => { },
+  onCastClick: () => { },
+  onChangeBitrate: () => { },
+  onBitrateReady: () => { },
+  onProgress: () => { },
+  onPrepare: () => { },
   themeColor: '#F85959',
   enableHardwareDecoder: false,
   setSpeed: 1.0,
   setScaleMode: 0,
   isLandscape: true,
+  disableSlide: false,
 };
 
 export default React.memo(Player);
