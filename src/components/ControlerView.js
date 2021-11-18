@@ -11,6 +11,7 @@ import StateView from './StateView';
 import Progress from './Progress';
 import ConfigView from './ConfigView';
 import QualityView from './QualityView';
+import FastImage from 'react-native-fast-image';
 
 const GradientWhite = 'rgba(0,0,0,0)';
 const GradientBlack = 'rgba(0,0,0,0.3)';
@@ -164,7 +165,7 @@ function ControlerView({
 
   return (
     <SafeAreaView style={styles.controler}>
-      {!isStart && <Image source={poster} resizeMode="contain" style={StyleSheet.absoluteFill} />}
+      {!isStart && <FastImage source={poster} resizeMode={'cover'} style={StyleSheet.absoluteFill} />}
       <AnimateView
         style={[
           styles.header,

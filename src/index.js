@@ -1,8 +1,7 @@
-import React, { forwardRef, useRef, useState, useEffect, useImperativeHandle, useCallback } from 'react';
-import { StyleSheet, Image, View, Platform } from 'react-native';
+import React, { forwardRef, useRef, useState, useEffect, useImperativeHandle } from 'react';
+import { StyleSheet, Image, View, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import { useBackHandler, useAppState, useDimensions } from '@react-native-community/hooks';
-
 
 import ALIViewPlayer from './ALIViewPlayer';
 import ControlerView from './components/ControlerView';
@@ -10,7 +9,8 @@ import ControlerView from './components/ControlerView';
 const styles = StyleSheet.create({
   base: {
     overflow: 'hidden',
-    backgroundColor: 'black',
+    backgroundColor: 'transparent',
+    ...StyleSheet.absoluteFill
   },
 });
 
@@ -54,9 +54,8 @@ const Player = forwardRef(
     const { screen, window } = useDimensions();
     const currentAppState = useAppState();
 
-    // const [isDisableSlide, setIsdisableSlide] = useState(disableSlide)
-
-
+    const windowWidth = useWindowDimensions().width;
+    const windowHeight = useWindowDimensions().height;
 
     useImperativeHandle(ref, () => ({
       play: (play) => {
@@ -160,45 +159,14 @@ const Player = forwardRef(
       setBitrateIndex(newIndex);
     };
 
-    const isOrientationLandscape = isLandscape;
-
-    const width = Platform.select({
-      ios: 100,
-      android: 60
-    })
+    // const isOrientationLandscape = isLandscape;
 
     const fullscreenStyle = {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 20,
-
-      width: isOrientationLandscape
-        ? Math.max(screen.width, screen.height) - width
-        : Math.min(screen.width, screen.height),
-      height: isOrientationLandscape
-        ? Math.min(screen.width, screen.height)
-        : Math.max(screen.width, screen.height),
-      zIndex: 100,
+      flex:1
     };
-
-    const fullwindowStyle = {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      left: 0,
-      bottom: 0,
-      width: isOrientationLandscape
-        ? Math.max(window.width, window.height)
-        : Math.min(window.width, window.height),
-      height: isOrientationLandscape
-        ? Math.min(window.width, window.height)
-        : Math.max(window.width, window.height),
-    };
-
+ 
     return (
-      <View style={[styles.base, isFull ? fullwindowStyle : style]}>
+      <View style={[styles.base, isFull ? fullscreenStyle : style]}>
         <ALIViewPlayer
           {...restProps}
           ref={playerRef}
@@ -288,6 +256,7 @@ const Player = forwardRef(
             onChangeBitrate={handleChangeBitrate}
           />
         </ALIViewPlayer>
+
       </View>
     );
   }
