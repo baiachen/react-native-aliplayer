@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
-import { Text, Animated, Easing, SafeAreaView, StyleSheet, Image } from 'react-native';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { Text, Animated, Easing, SafeAreaView, StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Slider from './Slide';
 
@@ -162,7 +162,6 @@ function ControlerView({
     }
   };
 
-
   return (
     <SafeAreaView style={styles.controler}>
       {!isStart && <FastImage source={poster} resizeMode={'cover'} style={StyleSheet.absoluteFill} />}
@@ -223,13 +222,14 @@ function ControlerView({
         />
         <Text style={styles.textTime}>{`${currentFormat.M}:${currentFormat.S}`}</Text>
         <Slider
+          disableSlide={disableSlide}
           progress={current}
           min={0}
           max={total}
           cache={buffer}
           style={styles.bottomSlide}
-          onSlidingComplete={(value) => {
-            onSlide(parseInt(value), !disableSlide);
+          onSlidingComplete={value => {
+            onSlide(parseInt(value))
           }}
           themeColor={themeColor}
         />

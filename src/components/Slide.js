@@ -5,7 +5,7 @@ import { formatTime } from '../lib/utils';
 
 const { Value } = Animated;
 
-function VideoSlide({ style, progress, min, max, themeColor, cache, ...restProps }) {
+function VideoSlide({ style, progress, min, max, themeColor, cache,disableSlide, ...restProps }) {
   const ballonRef = useRef();
 
   const valueMin = useMemo(() => new Value(0), []);
@@ -24,8 +24,18 @@ function VideoSlide({ style, progress, min, max, themeColor, cache, ...restProps
     return <Ballon ref={ballonRef} color={themeColor} textStyle={{ color: 'white' }} />;
   };
 
+  
+  useEffect(()=>{
+    console.log('wo改变了，', disableSlide)
+  }, [disableSlide])
+
+  // const getValue = useCallback(()=>{
+  //   return disableSlide
+  // }, [disableSlide])
+
   return (
     <Slider
+
       style={style}
       min={valueMin}
       max={valueMax}
@@ -43,6 +53,8 @@ function VideoSlide({ style, progress, min, max, themeColor, cache, ...restProps
       renderThumbImage={() => {}}
       setBallonText={(text) => ballonRef.current.setText(text)}
       {...restProps}
+      // onSlidingComplete={onSlidingComplete}
+      disableSlide={!disableSlide}
     />
   );
 }
