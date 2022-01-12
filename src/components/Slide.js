@@ -24,14 +24,6 @@ function VideoSlide({ style, progress, min, max, themeColor, cache,disableSlide,
     return <Ballon ref={ballonRef} color={themeColor} textStyle={{ color: 'white' }} />;
   };
 
-  
-  useEffect(()=>{
-    console.log('wo改变了，', disableSlide)
-  }, [disableSlide])
-
-  // const getValue = useCallback(()=>{
-  //   return disableSlide
-  // }, [disableSlide])
 
   return (
     <Slider

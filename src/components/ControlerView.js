@@ -161,6 +161,12 @@ function ControlerView({
       set();
     }
   };
+  //切换视频源改变播放速率
+  useEffect(()=>{
+    const newConfig = Object.assign({}, configObj, { setSpeed: 1.0 });
+    setConfigObj(newConfig);
+    onChangeConfig(newConfig);
+  }, [playSource])
 
   return (
     <SafeAreaView style={styles.controler}>

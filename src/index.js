@@ -1,7 +1,8 @@
-import React, { forwardRef, useRef, useState, useEffect, useImperativeHandle } from 'react';
-import { StyleSheet, Image, View, useWindowDimensions } from 'react-native';
+import React, { forwardRef, useRef, useState, useEffect, useImperativeHandle, useCallback } from 'react';
+import { StyleSheet, Image, View, Platform, StatusBar, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import { useBackHandler, useAppState, useDimensions } from '@react-native-community/hooks';
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 
 import ALIViewPlayer from './ALIViewPlayer';
 import ControlerView from './components/ControlerView';
@@ -19,6 +20,7 @@ const Player = forwardRef(
     {
       title,
       source,
+      vidAuth,
       poster,
       style,
       themeColor,
@@ -51,11 +53,13 @@ const Player = forwardRef(
     const [isStart, setIsStart] = useState(false);
     const [bitrateList, setBitrateList] = useState([]);
     const [bitrateIndex, setBitrateIndex] = useState();
-    const { screen, window } = useDimensions();
+    // const [d ,setD] = useState(false)
+    // const { screen, window } = useDimensions();
     const currentAppState = useAppState();
 
-    const windowWidth = useWindowDimensions().width;
-    const windowHeight = useWindowDimensions().height;
+
+    // const windowWidth = useWindowDimensions().width;
+    // const windowHeight = useWindowDimensions().height;
 
     useImperativeHandle(ref, () => ({
       play: (play) => {
@@ -82,6 +86,7 @@ const Player = forwardRef(
         changeSource(source);
       }
     }, [source]);
+
 
     useEffect(() => {
       if (currentAppState === 'background') {
@@ -127,11 +132,8 @@ const Player = forwardRef(
       playerRef.current.reloadPlay();
     };
 
-    const handleSlide = (value, enableSlide) => {
-      console.log(enableSlide)
-      if (enableSlide) {
-        playerRef.current.seekTo(value);
-      }
+    const handleSlide = value => {
+      playerRef.current.seekTo(value);
     }
 
     const handleStop = () => {
@@ -162,15 +164,16 @@ const Player = forwardRef(
     // const isOrientationLandscape = isLandscape;
 
     const fullscreenStyle = {
-      flex:1
+      flex: 1
     };
- 
+
     return (
       <View style={[styles.base, isFull ? fullscreenStyle : style]}>
         <ALIViewPlayer
           {...restProps}
           ref={playerRef}
           source={playSource}
+          vidAuth={vidAuth}
           setAutoPlay={setAutoPlay}
           selectBitrateIndex={bitrateIndex}
           style={isFull ? fullscreenStyle : StyleSheet.absoluteFill}
@@ -216,6 +219,7 @@ const Player = forwardRef(
             onCompletion();
           }}
           onAliError={({ nativeEvent }) => {
+            console.log(nativeEvent)
             setError(true);
             setErrorObj(nativeEvent);
           }}
